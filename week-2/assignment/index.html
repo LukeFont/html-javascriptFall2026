@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 2 Gun Program</title>
     <!--PUT YOUR NAME IN THE META TAG FOR AUTHOR-->
-    <meta name="author" content="YOUR NAME GOES HERE">
+    <meta name="author" content="Lukas Fontaine">
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
     <meta name="description" content="Small programming assignment using events, variables, functions and conditional logic">
 </head>
@@ -86,6 +86,31 @@
             c. Display the result on in the reloadDisplay by changing it's innerHTML
             d. EXTRA CHALLENGE: Figure out how much ammo to load. This will require some math based on how much ammo has been expended and the maximum amount ammo the weapon can hold
         --------------------------------------------------*/
+        reloadButton.addEventListener(`click`, reload)
+
+        function reload(event)
+        {
+            var invMove = max - currentAmmo //ammo needed for reload (amount moving out of inventory)
+
+
+            if(invMove > inventory) //when inventory is less than the ammo needed for reload, move all of the inventory to currentAmmo
+            {
+                currentAmmo = currentAmmo + inventory
+                inventory = 0
+                triggerDisplay.innerHTML = `AMMO: ${currentAmmo}`
+                reloadDisplay.innerHTML = `INVENTORY: ${inventory}`
+                return;
+                
+            }
+            
+            inventory = inventory - invMove //subtract from inventory
+            
+            
+            
+            currentAmmo = currentAmmo + invMove
+            reloadDisplay.innerHTML = `INVENTORY: ${inventory}`
+            triggerDisplay.innerHTML = `AMMO: ${currentAmmo}`
+        }
     </script>
 </body>
 </html>
