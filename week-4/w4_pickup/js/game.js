@@ -128,7 +128,13 @@ function main()
 
    /*--------------text----------------*/
    //makes the text center aligned instead of left aligned
+<<<<<<< HEAD
     
+=======
+    ctx.fillStyle = 'red';
+    ctx.font = "64px Arial";
+    ctx.fillText(`Score: ${score}`);
+>>>>>>> c7b7a0ae0b717021f36de018372b7eb34739ba47
     ctx.textAlign = `center`;
 
     /*----------INSTRUCTION------------
@@ -137,9 +143,12 @@ function main()
     HINT: You will have to research how this works 
     W3schools.com and your book can help
     -----------------------------------*/
+<<<<<<< HEAD
     ctx.fillStyle = 'red';
     ctx.font = "64px Arial";
     ctx.fillText(`Score: ${score}`, c.width/2, 64);
+=======
+>>>>>>> c7b7a0ae0b717021f36de018372b7eb34739ba47
     
 }
 
