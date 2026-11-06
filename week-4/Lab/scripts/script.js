@@ -26,6 +26,8 @@ var acceleration = 0.5;
 var friction = 0.9;
 
 var score = 100;
+var hitCount = 0;
+var shotSound = new Audio("audio/button-3.mp3");
 
 function createStar() {
     var star = {
@@ -52,12 +54,12 @@ for(var i = 0; i < starCount; i++) {
     stars[i] = createStar();
     stars[i].x = Math.random() * canvas.width;
     stars[i].y = Math.random() * canvas.height;
-    stars[i].radius = (Math.random() * 3) + 1;
+    stars[i].radius = (Math.random() * 3) + 1.5;
 }
 
 
 
-var shipSprite
+
 var a = false;
 var d = false;
 var w = false;
@@ -67,6 +69,7 @@ var space = false;
 //variable for bullets
 var bullets = [];
 var shootCooldown = 0;
+var boxCooldown = 0;
 
 
 
@@ -220,7 +223,23 @@ function game() {
         shootCooldown--;
     }
 
+    if (boxCooldown > 0) {
+        boxCooldown--;
+    }
+
+    if (boxCooldown == 1) {
+            startpoint.x = Math.random() * canvas.width;
+            startpoint.y = Math.random() * canvas.height;
+            moveDirection.x = Math.random() < 0.5 ? -1 : 1;
+            moveDirection.y = Math.random() < 0.5 ? -1 : 1;
+            boxColor = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+    }
+
+    
+
+
     if (space && shootCooldown === 0) {
+        
         bullets.push({
             x: shipSprite.x + 25 / 2 - 2, // center the bullet on the ship
             y: shipSprite.y - 10, // position the bullet above the ship
@@ -230,6 +249,8 @@ function game() {
             color: 'white'
         });
         shootCooldown = 20; // cooldown period before the next shot
+        shotSound.play(); // play the shooting sound
+        
     }
 
     if (startpoint.y > canvas.height - 25 || startpoint.y < 0) {
@@ -246,6 +267,7 @@ function game() {
 
     ctx.fillStyle = boxColor;
     ctx.fillRect(startpoint.x, startpoint.y, 25, 25);
+    
     for (var i = bullets.length - 1; i >= 0; i--) {
         bullet = bullets[i];
         bullet.y -= bullet.speed;
@@ -262,9 +284,17 @@ function game() {
 
         if (hitBox){
             bullets.splice(i, 1); //remove the bullet from the array
-            startpoint.x = 10000;
+
+            //make box disappear for 3 seconds and then reappear at a random location
+            startpoint.x = 10000
+           
+           
+            // randomly 1 or -1 for x and y direction with random color
             moveDirection.x = 0;
             moveDirection.y = 0;
+            boxCooldown = 180; // 3 seconds at 60 fps
+            hitCount++;
+            
             continue;
         }
         for (var j = 0; j < stars.length; j++) {
@@ -272,6 +302,7 @@ function game() {
                 bullets.splice(i, 1); //remove the bullet from the array
                 stars[j].x = Math.random() * canvas.width;
                 stars[j].y = -(Math.random() * canvas.height);
+                hitCount++;
                 continue;
             }
         }
@@ -289,6 +320,10 @@ function game() {
     ctx.fillStyle = 'white';
     ctx.font = "30px Arial";
     ctx.fillText(`Score: ${score}`, 10, 80);
+
+    ctx.fillStyle = 'red';
+    ctx.font = "30px Arial";
+    ctx.fillText(`Hit Count: ${hitCount}`, 500, 80);
 
     
 

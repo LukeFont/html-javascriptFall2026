@@ -43,6 +43,7 @@ testPickup.color = `#2244ff`;
 var amt = 50;
 var pickups = [];
 
+
 for(var i=0; i<amt; i++)
 {
     pickups[i] = new GameObject();
@@ -107,6 +108,7 @@ function main()
         /*----------INSTRUCTION------------
         increase the score by one
         -----------------------------------*/
+        score += 1;
     }
 
     for(var i=0; i<pickups.length; i++)
@@ -114,7 +116,10 @@ function main()
         /*----------INSTRUCTION------------
         make the avatar "collect" the pickups and increase the score
         -----------------------------------*/
-       
+       if (pickups[i].overlaps(avatar)) {
+        pickups[i].x = 1000;
+        score += 1;
+       }
         pickups[i].render();
     }
 
@@ -123,7 +128,8 @@ function main()
 
    /*--------------text----------------*/
    //makes the text center aligned instead of left aligned
-   ctx.textAlign = `center`;
+    
+    ctx.textAlign = `center`;
 
     /*----------INSTRUCTION------------
     Set the context's font property to use 64px Arial 
@@ -131,6 +137,10 @@ function main()
     HINT: You will have to research how this works 
     W3schools.com and your book can help
     -----------------------------------*/
+    ctx.fillStyle = 'red';
+    ctx.font = "64px Arial";
+    ctx.fillText(`Score: ${score}`, c.width/2, 64);
+    
 }
 
 //random number generator
