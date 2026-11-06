@@ -123,7 +123,10 @@ function main()
 
    /*--------------text----------------*/
    //makes the text center aligned instead of left aligned
-   ctx.textAlign = `center`;
+    ctx.fillStyle = 'red';
+    ctx.font = "64px Arial";
+    ctx.fillText(`Score: ${score}`);
+    ctx.textAlign = `center`;
 
     /*----------INSTRUCTION------------
     Set the context's font property to use 64px Arial 
@@ -131,6 +134,7 @@ function main()
     HINT: You will have to research how this works 
     W3schools.com and your book can help
     -----------------------------------*/
+    
 }
 
 //random number generator
