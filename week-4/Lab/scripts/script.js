@@ -27,7 +27,7 @@ var friction = 0.9;
 
 var score = 100;
 var hitCount = 0;
-var shotSound = new Audio("audio/button-3.mp3");
+var shotSound = new Audio("audio/button-4.mp3");
 
 function createStar() {
     var star = {
