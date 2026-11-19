@@ -10,10 +10,37 @@ var timer = setInterval(game, fps);
 var states = ["title", "game", "gameover"];
 var states = "title";
 
-var car = {
-    x: 0,
-    y: 0,
-    color: "black",
+
+
+//player car
+var player = {
+    x: canvas.width / 2,
+    y: canvas.height / 2 + 200,
+    width: 25,
+    height: 52,
+    color: 'black',
+    drawRect() {
+        fillStyle = this.color;
+        fillRect(this.x, this.y, this.width, this.height);
+    }
+    
+    
+}
+
+//creates rectangles as the cars
+function createCar() {
+    var car = {
+        x: 0,
+        y: 0,
+        width: 25,
+        height: 50,
+        color: 'white',
+        drawRect() {
+            fillStyle = this.color;
+            fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    return car;
 }
 
 
@@ -28,6 +55,7 @@ function game() {
             //title screen code
             //clear the screen
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             ctx.fillStyle = 'black';
             ctx.font = "50px Arial";
             let titleText = "Traffic Dodger";
@@ -55,7 +83,6 @@ function game() {
             //game over code
             //stop timer and display final time
             clearInterval(timer);
-            timer = 0;
             ctx.fillStyle = 'black';
             ctx.font = "30px Arial";
             ctx.fillText("Final Time " + timer, canvas.width / 2 - (ctx.measureText("Final Time " + timer).width / 2), canvas.height / 2 - 20);
