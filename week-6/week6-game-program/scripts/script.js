@@ -95,10 +95,10 @@ function game() {
 
             // Lane lines
             ctx.fillStyle = 'white';
-            ctx.fillRect(100, 0, 5, canvas.height)
-            ctx.fillRect(200, 0, 5, canvas.height)
-            ctx.fillRect(300, 0, 5, canvas.height)
-            ctx.fillRect(400, 0, 5, canvas.height)
+            ctx.fillRect(100-2.5, 0, 5, canvas.height)
+            ctx.fillRect(200-2.5, 0, 5, canvas.height)
+            ctx.fillRect(300-2.5, 0, 5, canvas.height)
+            ctx.fillRect(400-2.5, 0, 5, canvas.height)
 
             //spawn player
             ctx.fillStyle = player.color;
@@ -110,7 +110,7 @@ function game() {
                 // To be edited
                 if (cars[i].y > canvas.height + 50) {
                     cars[i].x = Math.floor(Math.random() * 5)*100 + 20;
-                    cars[i].y = 10);
+                    cars[i].y = -100
                 }
             }
 
