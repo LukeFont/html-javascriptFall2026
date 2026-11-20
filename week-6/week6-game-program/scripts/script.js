@@ -56,6 +56,7 @@ player.moveX = 0;
 var powerUpCooldown = 0;
 
 var storedPowerUp = "None"
+var storedPowerUpColor = 'white';
 
 var powerUpDuration = 0;
 
@@ -106,6 +107,7 @@ function playerCollision(obj, car) {
     }
 }
 
+//function for player colliding with powerups
 function playerToPowerUpCollision(obj, powerUp) {
     var closestX = Math.max(obj.x, Math.min(powerUp.x, obj.x + obj.width));
     var closestY = Math.max(obj.y, Math.min(powerUp.y, obj.y + obj.height));
@@ -116,6 +118,8 @@ function playerToPowerUpCollision(obj, powerUp) {
     var dist = dx * dx + dy * dy;
     return dist <= (powerUp.radius * powerUp.radius);
 }
+
+
 
 // Actual game
 function game() {
@@ -221,8 +225,11 @@ function game() {
             for (var m = 0; m < powerUps.length; m++) {
                 if (playerToPowerUpCollision(player, powerUps[m])) {
                     storedPowerUp = powerUp.color;
-                    powerUps.splice(k, 1);
+                    storedPowerUpColor = powerUp.color;
+                    powerUps.splice(m, 1);
+                    continue;
                 }
+                
             }
 
             //creates car objects
@@ -246,6 +253,10 @@ function game() {
                     powerUps.splice(k, 1);
                     continue;
                 }
+                if (playerToPowerUpCollision(car, powerUps[k])) {
+                    powerUps.splice(k, 1);
+                    continue;
+                }
                 
                 ctx.beginPath();
                 ctx.fillStyle = powerUp.color;
@@ -256,6 +267,7 @@ function game() {
             if (space && storedPowerUp != 'none') {
                 player.color = storedPowerUp;
                 storedPowerUp = "none";
+                storedPowerUpColor = 'white';
                 powerUpDuration = 180;
             }
 
@@ -264,7 +276,7 @@ function game() {
             }
 
             // Draw stored power up display
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = storedPowerUpColor;
             ctx.font = "30px Arial";
             ctx.fillText(`Power Up: ${storedPowerUp}`, 20, 40);
             ctx.fillStyle = 'black';
@@ -321,10 +333,16 @@ function game() {
             if (enter) {
                 seconds = 0;
                 storedPowerUp = "none"
+                player.color = 'black';
+                storedPowerUpColor = 'white';
                 switchScenes("game");
                 
             }
             if (escape) {
+                seconds = 0;
+                storedPowerUp = "none"
+                player.color = 'black';
+                storedPowerUpColor = 'white';
                 switchScenes("title");
             }
 
@@ -332,8 +350,6 @@ function game() {
     }
 }
 
-//fix powerup spawning in cars
-    // Check collision between the two, splice then push to reset position?
 //test functionality of random car speeds
 // Add pseudo code to this file before turning in - IMPORTANT
 //try to get lane lines to be dotted and moving down the screen
