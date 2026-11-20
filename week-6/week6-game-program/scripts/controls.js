@@ -30,9 +30,9 @@ document.addEventListener('keydown', function (e) {
     if (e.key == 'Escape') {
         escape = true;
     }
-    // Check if this even works later lmao, "Spacebar" may not be the right key name
-    if (e.key == 'Spacebar') {
+    if (e.code == 'Space') {
         space = true;
+        e.preventDefault
     }
 });
 
@@ -52,6 +52,9 @@ document.addEventListener('keyup', function (e) {
         escape = false;
     }
     if (e.key == 'Spacebar'){
+        space = false;
+    }
+    if (e.code == 'Space') {
         space = false;
     }
 });
