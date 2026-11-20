@@ -36,7 +36,7 @@ var friction = .8;
 
 player.moveX = 0;
 
-// Powerup stuff
+// Powerup stuff <OLD>
 // function createPowerUp() {
 //     var powerUp = {
 //         x: 0,
@@ -60,7 +60,7 @@ var storedPowerUpColor = 'white';
 
 var powerUpDuration = 0;
 
-//creates rectangles as the cars
+//creates rectangles as the cars <OLD>
 // function createCar() {
 //     var car = {
 //         x: 0,
@@ -88,7 +88,11 @@ var cars = [];
 
 var powerUps = [];
 
-// Car spawner loop
+// Remnant of attempted dashed line system
+// var lineCooldown = 0;
+// var linesGroup = [];
+
+// Car spawner loop <OLD>
 // for (var i = 0; i < carCount; i++) {
 //     cars[i] = createCar();
 //     cars[i].x = Math.floor(Math.random() * 5)*100 + 20;
@@ -121,6 +125,8 @@ function playerToPowerUpCollision(obj, powerUp) {
 
 
 
+
+
 // Actual game
 function game() {
     //clear the screen
@@ -150,11 +156,14 @@ function game() {
             // timer incrementer
             funcTimer++
 
-
-
             if (carCooldown > 0) {
                 carCooldown--
             }
+
+            // Remnant of attempted dashed line system
+            // if (lineCooldown > 0) {
+            //     lineCooldown--
+            // }
 
             if (powerUpCooldown > 0) {
                 powerUpCooldown --
@@ -168,6 +177,31 @@ function game() {
             ctx.fillStyle = 'gray';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Lane lines loop? <attempted, failed>
+                // The goal wast initially to make groups of four and then push/splice those groups of four to get dashed road lines, but it didn't come to be.
+            // if (lineCooldown === 0) {
+            //     linesGroup.push({
+            //             x: 100-2.5,
+            //             y: -10,
+            //             width: 5,
+            //             height: 10,
+            //             speed: 3,
+            //         });
+            //     lineCooldown = 60;
+            // }
+
+            // for (var n = linesGroup.length - 1; n >= 0; n--) {
+            //     lines = linesGroup[n];
+            //     lines.y += lines.speed;
+                
+            //     if (lines.y > canvas.height) {
+            //         linesGroup.splice(n, 1); //remove the car from the array
+            //         continue;
+            //     }
+            //     ctx.fillStyle = "white";
+            //     ctx.fillRect(linesGroup.x, linesGroup.y, linesGroup.width, linesGroup.height);
+            // }
+
             // Lane lines
             ctx.fillStyle = 'white';
             ctx.fillRect(100-2.5, 0, 5, canvas.height);
@@ -180,6 +214,7 @@ function game() {
             ctx.fillStyle = player.color;
             ctx.fillRect(player.x, player.y, player.width, player.height);
             
+            //old spawn loop code
             // for (var i = 0; i < cars.length; i++){
             //     cars[i].drawRect();
             //     cars[i].y += 4;
@@ -188,15 +223,18 @@ function game() {
                 //         cars[i].y = -100
                 //     }
                 // }
+            
                 
-                if (carCooldown === 0) {
-                    cars.push({
-                        x: Math.floor(Math.random() * 5)*100 + 20,
-                        y: -100,
-                        width: 60,
-                        height: 90,
-                        color: getRandomColor(),
-                        speed: 4,
+               
+            
+            if (carCooldown === 0) {
+                cars.push({
+                    x: Math.floor(Math.random() * 5)*100 + 20,
+                    y: -100,
+                    width: 60,
+                    height: 90,
+                    color: getRandomColor(),
+                    speed: 4,
                 });
                 carCooldown = 30;
             }
@@ -209,9 +247,9 @@ function game() {
                     cars.splice(i, 1); //remove the car from the array
                     continue;
                 }
+
                 ctx.fillStyle = car.color;
                 ctx.fillRect(car.x, car.y, car.width, car.height);
-                
             }
             
             //check for player car collision
@@ -232,7 +270,7 @@ function game() {
                 
             }
 
-            //creates car objects
+            //power-ups
             if (powerUpCooldown === 0) {
                 powerUps.push({
                     x: Math.floor(Math.random() * 5)*100 + 50,
@@ -244,7 +282,7 @@ function game() {
                 powerUpCooldown = 420;
             }
             
-            //spawns car above screen
+            //spawns power-up above screen
             for (var k = powerUps.length - 1; k >= 0; k--) {
                 powerUp = powerUps[k];
                 powerUp.y += powerUp.speed;
@@ -253,16 +291,28 @@ function game() {
                     powerUps.splice(k, 1);
                     continue;
                 }
-                if (playerToPowerUpCollision(car, powerUps[k])) {
-                    powerUps.splice(k, 1);
-                    continue;
-                }
+
+                //deletes the power-up if it spawns inside of a car
+                // if (playerToPowerUpCollision(car, powerUps[k])) {
+                //     powerUps.splice(k, 1)
+                //     continue;
+                // }
                 
                 ctx.beginPath();
                 ctx.fillStyle = powerUp.color;
                 ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, 2 * Math.PI);
                 ctx.fill();
             }
+            
+            //checks for spawn collisions and deletes the powerUp if it is inside of a car
+           for (let p = cars.length - 1; p >= 0; p--) {
+                for (let q = powerUps.length - 1; q >= 0; q--) {
+                    if (playerToPowerUpCollision(cars[p], powerUps[q])) {
+                    powerUps.splice(q, 1)
+                    break;
+                    }
+                }
+           }
             
             if (space && storedPowerUp != 'none') {
                 player.color = storedPowerUp;
@@ -283,7 +333,10 @@ function game() {
             ctx.strokeText(`Power Up: ${storedPowerUp}`, 20, 40);
 
             // Draw updating timer under power up display
-                // Code here later
+            ctx.fillStyle = "white";
+            ctx.fillText(`Time: ${seconds} sec.`, 10, 80);
+            ctx.fillStyle = "black";
+            ctx.strokeText(`Time: ${seconds} sec.`, 10, 80);
 
             // Player movement
             player.moveX *= friction
@@ -350,6 +403,101 @@ function game() {
     }
 }
 
+// PSEUDO CODE Below
+
+/*
+Canvas
+Context
+Framerate
+
+Declare variables, arrays, functions, objects
+
+powerUp.overlaps function (takes player position, powerup position, and powerup color)
+	checks if player bounding box overlaps with power-up bounding box
+	if true, change player color to power up color
+	set power up timer to 4
+
+set playerStartPos variable
+playerColor variable
+
+car object
+	contains:
+		car color variable
+		car position/"lane" variable (xPos)
+		yPos variable (to move the cars down)
+
+carCollision function (takes player position and color and enemy car position and color)
+	checks if player bounding box overlaps with enemy car bounding box
+	if true but same color, nothing happens
+	if true and different color, player dies
+	else nothing happens
+
+Key pressed variables
+key "a"
+key "d"
+key "enter"
+key "escape"
+
+Game loop
+	Game states
+		case “title”
+			text (game name, description, directions, etc)
+			start button
+			if (start){
+    				set initial variables to 0
+    				switchScenes(“game”)
+			}
+
+		case “game”
+			start timer
+				Increment timer variable by one every 60 frames
+			set cooldown decrement
+			loop to create obstacles
+				Move the obstacle down the screen
+				check for hitbox overlap
+				if (carsCollision(player, cars[i]) && cooldown <= 0){
+    					switchScenes(“game over”)
+				}
+			loop to create power-ups
+				move powerup down the screen
+					at a slightly faster rate than the obstacle cars?
+				if (powerUp.overlaps(player)){
+    					move powerup off of screen
+    					cooldown = 180
+    					player.color = powerup.color
+				}
+			if statements for keypresses
+				Check for:
+					- a (move left)
+					- d (move right)
+					- enter (confirm)
+					- escape (deny)
+			prevent player from moving off of the screen
+			make canvas background black
+				set fillStyle and then fillRect
+			draw "lanes" with a function
+				set four positions to draw small rectangles in
+				draw a rectangle every [x interval]
+				move every rectangle down every frame
+				when rectangle reaches the bottom, delete it?
+			draw player
+			create HUD
+		Case “game over”
+			Game over text
+			Show final time
+			"yes" variable set to false
+			"no" variable set to false
+			Do you want to play again?
+			Press enter to play again, press escape to go back to title
+				check for player inputs
+				If ([confirm key] = true){
+    					switchScenes(“game”)
+				}
+				If ([deny key] = true){
+    					switchScenes(“title”)
+				}
+*/
+
 //test functionality of random car speeds
 // Add pseudo code to this file before turning in - IMPORTANT
-//try to get lane lines to be dotted and moving down the screen
+//try to get lane lines to be dotted and moving do
