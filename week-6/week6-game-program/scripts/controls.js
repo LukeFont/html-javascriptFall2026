@@ -3,6 +3,7 @@
 // Control vars
 var a = false;
 var d = false;
+var space = false;
 var enter = false;
 var escape = false;
 
@@ -29,6 +30,10 @@ document.addEventListener('keydown', function (e) {
     if (e.key == 'Escape') {
         escape = true;
     }
+    // Check if this even works later lmao, "Spacebar" may not be the right key name
+    if (e.key == 'Spacebar') {
+        space = true;
+    }
 });
 
 // Listens for key releases
@@ -45,5 +50,8 @@ document.addEventListener('keyup', function (e) {
     }
     if (e.key == 'Escape'){
         escape = false;
+    }
+    if (e.key == 'Spacebar'){
+        space = false;
     }
 });

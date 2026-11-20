@@ -180,6 +180,7 @@ function game() {
             }
             break;
         case "game":
+
             if (startCooldown > 0) {
                 startCooldown--;
             }
